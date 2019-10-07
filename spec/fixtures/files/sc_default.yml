@@ -1,0 +1,50 @@
+base:
+  public_key_path: ~/.ssh/id_ed25519.pub
+  secret_key_path: ~/.ssh/id_ed25519
+  ciphers: ed25519
+
+ 
+key_: 
+  value: value_
+  crypt: false
+  help: 平文デフォルト設定
+
+key1: 
+  value: value1
+  crypt: true
+  help: true = 暗号化、true以外 = 平文
+
+key2: 
+  value: value2
+  crypt: false
+  help: |
+    設定値サンプル２。
+    value2にはstring型が入る
+
+key_array:
+  value:
+    - array_value_01
+    - array_value_02
+    - array_value_03
+  crypt: false
+  help: |
+    設定サンプル（配列）
+    valueにいくつでも入れれる。
+
+key_set:
+  value:
+    - sub-key1: sub-value01-01
+      sub_key2: sub-value01-02
+      sub_key3: sub-value01-03
+    - sub-key1: sub-value02-01
+      sub_key2: sub-value02-02
+      sub_key3: sub-value02-03
+  crypt: false
+  help: |
+    設定サンプル。（ハッシュセット）
+    sub-key1〜sub-key3　を繰り返しまとめて設定できる。
+    (設定内容例） 
+    sub-key1 = url
+    sub-key2 = name
+    sub-key3 = password
+
