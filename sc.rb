@@ -1,22 +1,25 @@
 require 'yaml'
 
-# # yaml = YAML.load_file("Assets/config_custom.yml")
-# yaml = YAML.load_file("Assets/config_default.yml")
-# 
-# yaml.class # => Hash
-# 
-# p yaml["key1"]["value"] # => "value1"
-# p yaml["key_array"]["value"] # => "["array_value_01","array_value_02","array_value_03"]"
-# p yaml["key_set"]["value"] # =>
-# p 
-# # yaml.language
-# # => NoMethodError: undefined method `language' for #<Hash:0x007fd97d6def08>
+class CryptInfo
+  def initialize(crypt_type: 'ed25519', public_key: '~/.ssh/id_ed25519.pub', private_key: '~/.ssh/id_ed25519' )
+    @crypt_type = crypt_type
+    @public_key = public_key
+    @private_key = private_key
+  end
+
+  attr_accessor: :crypt_type
+  attr_accessor: :public_key
+  attr_accessor: :private_key
+end
 
 class SecureConf
-  def initialize(path: )
+  def initialize( path, crypt_type: 'ed25519', public_key: '~/.ssh/id_ed25519.pub', private_key: '~/.ssh/id_ed25519' )
     @conf = path
-    # load
+    @cryptype = cp.crypt_type
+    @public_key = cp.public_key
+    @private_key = cp.private_key
   end
+
 
   def load
     @yaml = YAML.load(@conf)
@@ -47,3 +50,4 @@ class SecureConf
   end
 
 end
+
