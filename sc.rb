@@ -1,25 +1,13 @@
 require 'yaml'
 
-class CryptInfo
-  def initialize(crypt_type: 'ed25519', public_key: '~/.ssh/id_ed25519.pub', private_key: '~/.ssh/id_ed25519' )
-    @crypt_type = crypt_type
-    @public_key = public_key
-    @private_key = private_key
-  end
-
-  attr_accessor: :crypt_type
-  attr_accessor: :public_key
-  attr_accessor: :private_key
-end
-
 class SecureConf
-  def initialize( path, crypt_type: 'ed25519', public_key: '~/.ssh/id_ed25519.pub', private_key: '~/.ssh/id_ed25519' )
-    @conf = path
-    @cryptype = cp.crypt_type
-    @public_key = cp.public_key
-    @private_key = cp.private_key
+  attr_reader :conf, :crypt_type, :crypt_public_key, :crypt_private_key
+  def initialize( path, *args)
+    args = %w[ed25519 ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519] if args.empty?
+    raise ArgumentError.new("wrong number of arguments (given #{args.size+1}, expected 1 or 4)") unless args.size == 3
+    @crypt_type, @crypt_public_key, @crypt_private_key = args
+    @conf = path 
   end
-
 
   def load
     @yaml = YAML.load(@conf)
@@ -39,14 +27,14 @@ class SecureConf
     end
   end
 
-  def add(key, value, crypted, help)
+  def put(key, value, crypted, help)
   end
 
   def update(key, value, crypted )
 
   end
 
-  def remove(key)
+  def delete(key)
   end
 
 end
