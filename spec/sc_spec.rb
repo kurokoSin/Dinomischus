@@ -44,7 +44,7 @@ RSpec.describe SecureConf do
    
   end
 
-  describe '#add 書込' do
+  describe '#put 書込' do
     context 'Rubyで使用するとき、' do
       it '暗号化して保存すること' do
         sc = SecureConf.new()
@@ -66,16 +66,16 @@ RSpec.describe SecureConf do
     end
   end
 
-  describe '#read 読込' do
+  describe '#get 読込' do
     context 'Rubyで使用するとき、' do
+      let(:sc){ SecureConf.new( './Assets/sc_default.yml' ) }
       it 'Exist ' do
-        sc = SecureConf.new( file_fixture("sc_default.yml") ) 
-        expect(sc.get(:key_)).to eq :value_
+        expect(sc.get("key_")).to eq "value_"
       end
     end
     context 'シェルで使用するとき、' do
+      let(:sc){ SecureConf.new( './Assets/sc_default.yml' ) }
       it 'Exist ' do
-        sc = SecureConf.new( file_fixture("sc_default.yml") ) 
         expect( system('sc -r key_') ).to eq :value_
       end
     end

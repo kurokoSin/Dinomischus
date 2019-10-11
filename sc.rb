@@ -7,6 +7,7 @@ class SecureConf
     raise ArgumentError.new("wrong number of arguments (given #{args.size+1}, expected 1 or 4)") unless args.size == 3
     @crypt_type, @crypt_public_key, @crypt_private_key = args
     @conf = path 
+    load
   end
 
   def load
@@ -19,12 +20,7 @@ class SecureConf
   end
 
   def get(key)
-    if yaml[key]["crypt"] = true then
-      decrypt(yaml[key]["value"]) 
-    else
-      # If plane text
-      yaml[key]["value"]
-    end
+      @yaml[key]["value"]
   end
 
   def put(key, value, crypted, help)
