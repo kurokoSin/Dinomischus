@@ -10,7 +10,7 @@ key_:
   help: 平文デフォルト設定
 
 key1: 
-  value: value1
+  value: asdfaiwjefwaeorvaeriuwqcawweerejlqwrij123dv2==
   crypt: true
   help: true = 暗号化、true以外 = 平文
 

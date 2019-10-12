@@ -11,7 +11,7 @@ class SecureConf
   end
 
   def load
-    @yaml = YAML.load(@conf)
+    @yaml = YAML.load_file(@conf)
   end
 
   def path_change(path: )
