@@ -18,32 +18,22 @@ Helpful Secure Configuration File Utility
 ## 呼び出し
 Ruby
 ```
-sci = sc.new()
+# 設定読込
+sci = SecureConf.new(yaml_file)
 value = sc.read(key)
-```
-
-Shell
-```
-value = `ruby sc.rb --read /path/to/SecureConfigFile.yml key`
-```
-## 設定方法
-暗号化
-Ruby
-```
-sci = sc.new()
+# 設定追記
+sci = SecureConf.new(yaml_file)
 sc.add( key, value, crypt_flg, help)
 ```
 
-shell
+
+シェルから使用する場合
 ```
+# 値読込
+value = `ruby sc.rb --read /path/to/SecureConfigFile.yml key`
+# 設定追加
 ruby sc.rb --add /path/to/SecureConfigFile.yml key value crypt_flg
-```
-
-## テンプレート作成
-Ruby 無し
-
-shell
-```
+# テンプレート作成
 ruby sc.rb --init /path/to/SecureConfigFile.yml
 ```
 
@@ -122,7 +112,7 @@ configファイルの ```base:default_config_path``` に設定が入っている
 そちらを先に読み込んだ後に本ファイルの設定値を上書きで読み込む。
 上の例でいくと呼び出し側からはこのような設定に見える。
 
-|設定項目|値(呼出側)|値(config_custom)|値(config_default)|
+|設定項目|値(取得する)|値(config_custom)|値(config_default)|
 |:-----:|:-------:|:--------------:|:----------------:|
 |key0_1 |復号した値|　(無し) | DetarAmEhoGehoGeSD67ncadfe2d== |
 |key0_2 | value0_2 | （無し） | value0_2 |
