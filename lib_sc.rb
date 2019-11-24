@@ -24,6 +24,9 @@ class SecureConf
   end
 
   def put(key, value, crypted, help)
+    kv = {key => {:value => value, :crypted => crypted, :help => help }}
+    @yaml.merge(kv)
+    YAML.dump(@yaml, File.open(@conf, 'w'))
   end
 
   def update(key, value, crypted )

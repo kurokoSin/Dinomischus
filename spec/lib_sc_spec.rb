@@ -1,4 +1,5 @@
 require 'stringio'
+require 'tempfile'
 require_relative '../lib_sc.rb'
 
 
@@ -44,6 +45,7 @@ RSpec.describe SecureConf do
   end
 
   describe 'Ruby から利用する。' do
+    let(:temp_out_path){ File.join(__dir__,'Assets/temp.yml') }
     context '#get 値を読み込むとき、' do
       it '平文の読込ができること' do
         expect(sc1.get("key_")).to eq "value_"
@@ -53,21 +55,29 @@ RSpec.describe SecureConf do
       end
     end
     context '#put 値を書き込むとき、' do
-      before do
-        out1 = StringIO.new("hoge", 'r+w')
-        sc = SecureConf.new(out1)
+      Tempfile.create(temp_out_path) do |f|
+        sc = SecureConf.new(f.path)
+     
+        it '平文で保存すること' do
+          sc.put(key, value) 
+          ryml = YAML.load_file(f.path)
+          expect( ryml["key"]["value"] ).to eq 'value'
+          expect( ryml["key"]["crypted"] ).to eq 'False'
+          expect( ryml["key"]["help"] ).to eq ''
+ 
+          expect( sc.put(key, value, nil) ).to eq ''
+          expect( sc.put(key, value, False) ).to eq ''
+          expect( sc.put(key, value, False, :HelpTextMessage) ).to  eq ''
+        end
+        it '暗号化して保存すること' do
+          expect( sc.put(:enckey, :encfugafuga, True) ).to eq ''
+          expect( sc.put(key, value, True)   ).to eq ''
+          expect( sc.put(key, value, True, :HelpTextMessage) ).to eq ''
+        end
       end
-      it '平文で保存すること' do
-        expect( sc.put(key, value) ).to  eq ''
-        expect( sc.put(key, value, nil) ).to  eq ''
-        expect( sc.put(key, value, False) ).to  eq ''
-        expect( sc.put(key, value, False, :HelpTextMessage) ).to  eq ''
-      end
-      it '暗号化して保存すること' do
-        expect( sc.put(:enckey, :encfugafuga, True) ).to eq ''
-        expect( sc.put(key, value, True)   ).to eq ''
-        expect( sc.put(key, value, True, :HelpTextMessage) ).to eq ''
-      end
+
+      
+      GC.enable
     end
   end
 
