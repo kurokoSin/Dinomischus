@@ -55,27 +55,30 @@ RSpec.describe SecureConf do
       end
     end
     context '#put 値を書き込むとき、' do
-      Tempfile.create(temp_out_path) do |f|
-        sc = SecureConf.new(f.path)
-     
-        it '平文で保存すること' do
+      it '平文で保存すること' do
+        Tempfile.create(temp_out_path) do |f|
+          sc = SecureConf.new(f.path)
           sc.put(key, value) 
           ryml = YAML.load_file(f.path)
           expect( ryml["key"]["value"] ).to eq 'value'
           expect( ryml["key"]["crypted"] ).to eq 'False'
           expect( ryml["key"]["help"] ).to eq ''
  
-          expect( sc.put(key, value, nil) ).to eq ''
-          expect( sc.put(key, value, False) ).to eq ''
-          expect( sc.put(key, value, False, :HelpTextMessage) ).to  eq ''
+          # sc.put(key, value, nil) 
+          sc.put(key, value, False) 
+          # sc.put(key, value, False, :HelpTextMessage)
+          sc.loa()
+          expect( sc.get("key") ).to eq "value"
         end
-        it '暗号化して保存すること' do
+      end
+      it '暗号化して保存すること' do
+        Tempfile.create(temp_out_path) do |f|
+          sc = SecureConf.new(f.path)
           expect( sc.put(:enckey, :encfugafuga, True) ).to eq ''
           expect( sc.put(key, value, True)   ).to eq ''
           expect( sc.put(key, value, True, :HelpTextMessage) ).to eq ''
         end
       end
-
       
       GC.enable
     end
