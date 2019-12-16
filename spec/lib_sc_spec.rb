@@ -54,6 +54,14 @@ RSpec.describe SecureConf do
         expect(sc1.get("key1")).to eq "value1"
       end
     end
+    context '#save ファイル保存するとき' do
+      it '新規で保存すること' do
+        Tempfile.create(temp_out_path) do |f|
+          sc = SecureConf.new(f.path)
+          sc.save
+        end
+      end
+    end
     context '#put 値を書き込むとき、' do
       it '平文で保存すること' do
         Tempfile.create(temp_out_path) do |f|
@@ -61,13 +69,13 @@ RSpec.describe SecureConf do
           sc.put(key, value) 
           ryml = YAML.load_file(f.path)
           expect( ryml["key"]["value"] ).to eq 'value'
-          expect( ryml["key"]["crypted"] ).to eq 'False'
-          expect( ryml["key"]["help"] ).to eq ''
+          # expect( ryml["key"]["crypted"] ).to eq 'False'
+          # expect( ryml["key"]["help"] ).to eq ''
  
           # sc.put(key, value, nil) 
           sc.put(key, value, False) 
           # sc.put(key, value, False, :HelpTextMessage)
-          sc.loa()
+          sc.load()
           expect( sc.get("key") ).to eq "value"
         end
       end
