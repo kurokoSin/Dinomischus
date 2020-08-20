@@ -1,16 +1,37 @@
 require 'yaml'
 require 'json'
+require 'optparse'
+require 'securerandom'
 
-class SecureConf
-  attr_reader :conf, :crypt_type, :crypt_public_key, :crypt_private_key
+require File.expand_path('../mods/crypt_aes.rb', __FILE__)
 
-  def initialize( path, *args)
-    args = %w[ed25519 ~/.ssh/id_ed25519.pub ~/.ssh/id_ed25519] if args.empty?
+class Dinomischus
+  attr_reader :conf, :is_read, :is_update, :is_create
+
+  # Create the key file
+  def self.createkey?(path, *args)
+    return false if File.exist?(path)
+    pass = SecureRandom.urlsafe_base64 if args.empty?
+    hash = {"key": {"type": "sha256", "value": pass}}
+    File.open(path, "w") do |f|
+      f.puts( YAML.dump(hash) )
+    end
+    true
+  end
+
+  def initialize(path, *args)
+    args = %w[--read-only] if args.empty?
+
+    opt = OptionParser.new
+    # opt.on('--write'    ) { |v| :is_read = v, :is_update = v,  :is_create = v}
+    # opt.on('--read-only') { |v| :is_read = v, :is_update = !v, :is_create = !v}
+
     raise ArgumentError.new(
             "wrong number of arguments (given #{args.size+1}, 
-            expected 1 or 4)"
-    ) unless args.size == 3
-    @crypt_type, @crypt_public_key, @crypt_private_key = args
+             Usage: path [--read-only | --write | --overwrite]
+            )"
+    ) unless args.size == 2
+    
     @conf = path 
     load
   end
