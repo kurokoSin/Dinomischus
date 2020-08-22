@@ -9,14 +9,37 @@ class Dinomischus
   attr_reader :conf, :is_read, :is_update, :is_create
 
   # Create the key file
-  def self.createkey?(path, *args)
-    return false if File.exist?(path)
+  def self.createkey(path, *args)
+    raise RuntimeError.new("ファイルが存在します。#{path}") if File.exist?(path)
     pass = SecureRandom.urlsafe_base64 if args.empty?
     hash = {"key": {"type": "sha256", "value": pass}}
     File.open(path, "w") do |f|
       f.puts( YAML.dump(hash) )
     end
     true
+  end
+
+  # Create the define file
+  def self.createdef?(def_path, pos, conf_path, key_path)
+    return false if def_path.empty?
+    return false if pos.empty?       || !pos.math( "^[0-9]+$" )
+    return false if conf_path.empty? || File.exist?(conf_path)
+    return false if key_path.empty?  || File.exist?(key_path)
+
+    if File.exist?(def_path)
+      File.open(path, "a") do |f|
+        hash = JSON.load(f)
+        p "hash = " + hash
+        p " "
+        p "to YAML = " + YAML.dump(hash)
+      end
+    else
+      def_hash = {"conf_path": conf_path}
+      dat = [ def_hash ]
+      File.open(path, "w") do |f|
+        f.puts YAML.dump(dat)
+      end
+    end
   end
 
   def initialize(path, *args)
