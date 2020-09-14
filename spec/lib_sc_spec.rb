@@ -8,7 +8,9 @@ require_relative '../lib_sc.rb'
 # 設定の上書きをすることにより、共通設定ができるようにする。
 
 RSpec.describe Dinomischus do
-  let(:key_path){ File.join(__dir__,'Assets/key.yml') }
+  let(:key_path){ File.join(__dir__, 'Assets/key.yml') }
+  let(:def_path){ File.join(__dir__, 'Assets/def_file.yml') }
+  let(:cfg_path){ File.join(__dir__, 'Assets/cfg_file.yml') }
   let(:test_path){ File.join(__dir__,'Assets/sc_default.yml') }
 #  let(:sc1){ SecureConf.new( test_path ) }
 #  let(:sc4){ SecureConf.new( test_path, params[0], params[1], params[2]) }
@@ -20,27 +22,61 @@ RSpec.describe Dinomischus do
 
     context '新規ファイル作成する場合' do
       it 'パスワードの指定無しで作成できること' do
-        result = Dinomischus::createkey(key_path)
+        file = StringIO.new('','w')
+        allow(File).to receive(:open).and_yield(file)
+        result = Dinomischus::create_key_file(key_path)
+        p file.string
         expect( result ).to be true
       end
       it 'パスワードが指定有りで作成できること' do
-        result = Dinomischus::createkey(key_path, 'hogehoge')
+        result = Dinomischus::create_key_file(key_path, 'hogehoge')
         expect( result ).to be true
       end
     end
 
     context '既存の鍵ファイルをpathに指定したとき' do
-      it '存在しないパスで例外が発生すること' do
-        expect{ Dinomischus::createkey(key_path + '/NoExists.yml') }.to raise_error(Errno::ENOENT)
-      end
 
       it '例外が発生すること' do
         FileUtils.touch(key_path)
-        expect{ Dinomischus::createkey(key_path) }.to raise_error(RuntimeError)
+        expect{ Dinomischus::create_key_file(key_path) }.to raise_error(RuntimeError)
       end
+    end
+    
+    context '引数に問題がある場合' do
+      it 'パスの指定がnilの場合' do
+        expect{ Dinomischus::create_key_file().with(no_args) }.to raise_error(ArgumentError)
+      end
+      it 'パスの指定が空文字の場合' do
+        expect{ Dinomischus::create_key_file( '' ) }.to raise_error(Errno::ENOENT)
+      end
+      it '存在しないパスで例外が発生すること' do
+        expect{ Dinomischus::create_key_file(key_path + '/NoExists.yml') }.to raise_error(Errno::ENOENT)
+      end
+
     end
   end
 
+  describe '#create_def_file 定義ファイルの作成' do
+    before(:each) do
+      Dinomischus::create_key_file(key_path)
+    end
+    after(:each) do
+      File.delete(key_path) if File.exists?(key_path)
+    end
+
+    it 'ファイルを作成できる時' do
+      file = ::StringIO.new('','w')
+      allow(File).to receive(:open).and_yield(file)
+      # allow(File).to receive(:open).and_return(file)
+#      result = Dinomischus.test(def_path)
+      result = Dinomischus::create_def_file(def_path, 0, cfg_path, key_path)
+      p  file.string
+#      skip expect( File.exists?(def_path) ).to be true
+    end
+    it 'ファイルを作成できない時' do
+      pending 'エラーが発生する'
+    end
+  end
 #  describe '#initialize コンストラクタ' do
 #    context '引数が ０ or ２つ or ３つ のとき' do
 #      it 'エラーになること' do

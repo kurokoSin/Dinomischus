@@ -8,13 +8,15 @@ module Crypter
     # ======================================
     # plain_text: 暗号化したい文字列
     # password  : 好きなパスワード
+    # salt      : ソルト：Base64でエンコードされた文字列
     # bit       : 鍵の長さをビット数で指定。128, 192, 256が指定できる。
     #             基本的には256を指定しておけば安心。
     # ======================================
-    def encrypt(plain_text, password, bit = 256)
+    def encrypt(plain_text, password, salt = "", bit = 256)
   
       # saltを生成
-      salt = OpenSSL::Random.random_bytes(8)
+      # salt = OpenSSL::Random.random_bytes(8)
+      salt = salt.empty? ? OpenSSL::Random.random_bytes(8) : Base64.decode64(salt) 
   
       # 暗号器を生成
       enc = OpenSSL::Cipher::AES.new(bit, :CBC)
