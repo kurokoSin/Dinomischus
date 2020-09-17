@@ -12,11 +12,11 @@ module Crypter
     # bit       : 鍵の長さをビット数で指定。128, 192, 256が指定できる。
     #             基本的には256を指定しておけば安心。
     # ======================================
-    def encrypt(plain_text, password, salt = "", bit = 256)
+    def encrypt(plain_text, password, use_salt = false)
   
       # saltを生成
       # salt = OpenSSL::Random.random_bytes(8)
-      salt = salt.empty? ? OpenSSL::Random.random_bytes(8) : Base64.decode64(salt) 
+      salt = use_salt ? OpenSSL::Random.random_bytes(8) : ""
   
       # 暗号器を生成
       enc = OpenSSL::Cipher::AES.new(bit, :CBC)
@@ -47,11 +47,11 @@ module Crypter
     # salt          : 暗号化した時に生成されたsalt
     # bit           : 暗号化した時に指定したビット数
     # ======================================
-    def decrypt(encrypted_text, password, salt, bit = 256) 
+    def decrypt(encrypted_text, password, salt_base64 = "") 
   
       # Base64でデコード
       encrypted_text = Base64.decode64(encrypted_text)
-      salt = Base64.decode64(salt)
+      salt = Base64.decode64(salt_base64)  if !salt_base64.empty?
   
       # 復号器を生成
       dec = OpenSSL::Cipher::AES.new(bit, :CBC)

@@ -66,9 +66,8 @@ RSpec.describe Dinomischus do
 
     it 'ファイルを作成できる時' do
       file = ::StringIO.new('','w')
-      allow(File).to receive(:open).and_yield(file)
+      allow(File).to receive(:open).with(def_path, 'w').and_yield(file)
       # allow(File).to receive(:open).and_return(file)
-#      result = Dinomischus.test(def_path)
       result = Dinomischus::create_def_file(def_path, 0, cfg_path, key_path)
       p  file.string
 #      skip expect( File.exists?(def_path) ).to be true
