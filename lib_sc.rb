@@ -14,7 +14,7 @@ class Dinomischus
     raise RuntimeError.new("ファイルが存在します。#{path}") if File.exist?(path)
     password = SecureRandom.urlsafe_base64 if password.empty?
     hash = {"key": {"type": "sha256", "value": password}}
-    File.open(path, "w") do |f|
+    File.open(path, 'w') do |f|
       YAML.dump(hash, f)
     end
     true
@@ -28,7 +28,7 @@ class Dinomischus
     hash = {"key_path": key_path}
     base.push( hash )
     base.push( { "values": "" } )
-    File.open(conf_path, "w") do |f|
+    File.open(conf_path, 'w') do |f|
       YAML.dump(base, f)
     end
   end
@@ -45,7 +45,7 @@ class Dinomischus
     
     yml[1][key] = {"value": val_text, "desc": desc}
     p yml
-    File.open(conf_path, "w") do |f|
+    File.open(conf_path, 'w') do |f|
       YAML.dump( {key: {"value": val_text, "desc": desc}}, f )
     end
   end
@@ -62,7 +62,7 @@ class Dinomischus
       p def_file
     else
       def_hash = {"conf_path": conf_path}
-      File.open(def_path, "w") do |f|
+      File.open(def_path, 'w') do |f|
         YAML.dump(daf_hash, f)
       end
     end
@@ -122,7 +122,7 @@ class Dinomischus
                     }
            }
     FileUtils.touch(@conf) if File.exist?(@conf)
-    File.open(@conf, "w") do |f|
+    File.open(@conf, 'w') do |f|
       f.puts( base.to_json )
     end
     puts base.to_json
@@ -137,7 +137,7 @@ class Dinomischus
 
     kv = {key: {"value": value, "crypted": crypted, "desc": desc }}
     @yaml.merge(kv)
-    File.open(conf_path, "w" ) do |f|
+    File.open(conf_path, 'w' ) do |f|
       YAML.dump(kv, f)
     end
   end

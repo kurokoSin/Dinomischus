@@ -25,12 +25,20 @@ RSpec.describe Dinomischus do
         file = StringIO.new('','w')
         allow(File).to receive(:open).and_yield(file)
         result = Dinomischus::create_key_file(key_path)
-        p file.string
         expect( result ).to be true
+
+        yml = YAML.load(file.string)
+        expect( yml[:key][:type] ).to eq "sha256"
+        expect( yml[:key][:value] ).to match /[a-zA-Z0-9+=\-_]{22}/ 
       end
       it 'パスワードが指定有りで作成できること' do
+        file = StringIO.new('','w')
+        allow(File).to receive(:open).and_yield(file)
         result = Dinomischus::create_key_file(key_path, 'hogehoge')
         expect( result ).to be true
+        yml = YAML.load(file.string)
+        expect( yml[:key][:type] ).to eq "sha256"
+        expect( yml[:key][:value] ).to match "hogehoge"
       end
     end
 
@@ -66,11 +74,11 @@ RSpec.describe Dinomischus do
 
     it 'ファイルを作成できる時' do
       file = ::StringIO.new('','w')
+      inpt = ::StringIO.new("---\n- :conf_path: ""#{cfg_path}""")
+      allow(File).to receive(:open).with(def_path, 'r:bom|utf-8').and_yield(inpt)
       allow(File).to receive(:open).with(def_path, 'w').and_yield(file)
-      # allow(File).to receive(:open).and_return(file)
       result = Dinomischus::create_def_file(def_path, 0, cfg_path, key_path)
       p  file.string
-#      skip expect( File.exists?(def_path) ).to be true
     end
     it 'ファイルを作成できない時' do
       pending 'エラーが発生する'

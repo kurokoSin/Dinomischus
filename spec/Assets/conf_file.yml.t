@@ -1,5 +1,0 @@
----
-fruits:
-- Orange
-- Apple
-- Grape

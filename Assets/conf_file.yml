@@ -1,0 +1,18 @@
+---
+- :key_path: "./Assets/key_file.yml"
+- :dummy:
+    :value: ''
+    :desc: ''
+  add_key:
+    :value: "?G7Ct7ES2C2MN7mhf0lsLyvx9GrCi2uBBp7bjf00AvrM="
+    :desc: setumei
+  add_key2:
+    :value: |-
+      ?vYO1c89W6usuZUxrKJpob1tqbzyH/Uiy6GtCaVcmUAXhrsY4/MNXTZhzOVhi
+      OyoY
+    :desc: setumei2
+  add_key1:
+    :value: |-
+      ?hgunFWEQ2xTTJ+OhTU9AM3yv/B420zrcGn4CVZxr4kKCu25MVTBmteb15ZLE
+      ExtZ
+    :desc: setumei1

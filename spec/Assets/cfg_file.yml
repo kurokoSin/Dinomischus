@@ -1,0 +1,8 @@
+---
+- :key_path: "./Assets/key_file.yml"
+- :dummy:
+    :value: ''
+    :desc: ''
+  add_key:
+    :value: added_value
+    :desc: ''

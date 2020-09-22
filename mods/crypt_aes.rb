@@ -9,17 +9,19 @@ module Crypter
     # plain_text: 暗号化したい文字列
     # password  : 好きなパスワード
     # salt      : ソルト：Base64でエンコードされた文字列
-    # bit       : 鍵の長さをビット数で指定。128, 192, 256が指定できる。
-    #             基本的には256を指定しておけば安心。
     # ======================================
-    def encrypt(plain_text, password, use_salt = false)
+    def self.encrypt(plain_text, password, use_salt = false)
+      raise RuntimeError.new("暗号化対象の文字列がありません。") if plain_text.nil?
+      raise RuntimeError.new("暗号化対象の文字列がありません。") if plain_text.empty?
+      raise RuntimeError.new("パスワードを設定していません。"  ) if password.nil?
+      raise RuntimeError.new("パスワードを設定していません。"  ) if password.empty?
   
       # saltを生成
       # salt = OpenSSL::Random.random_bytes(8)
       salt = use_salt ? OpenSSL::Random.random_bytes(8) : ""
   
       # 暗号器を生成
-      enc = OpenSSL::Cipher::AES.new(bit, :CBC)
+      enc = OpenSSL::Cipher::AES.new(256, :CBC)
       enc.encrypt
   
       # パスワードとsaltをもとに鍵とivを生成し、設定
@@ -45,16 +47,20 @@ module Crypter
     # encrypted_text: 復号したい文字列
     # password      : 暗号化した時に指定した文字列
     # salt          : 暗号化した時に生成されたsalt
-    # bit           : 暗号化した時に指定したビット数
     # ======================================
-    def decrypt(encrypted_text, password, salt_base64 = "") 
+    def self.decrypt(encrypted_text, password, salt_base64 = "") 
+      raise RuntimeError.new("復号対象の文字列がありません。") if encrypted_text.nil?
+      raise RuntimeError.new("復号対象の文字列がありません。") if encrypted_text.empty?
+      raise RuntimeError.new("パスワードがありません。") if password.nil?
+      raise RuntimeError.new("パスワードがありません。") if password.empty?
+      
   
       # Base64でデコード
       encrypted_text = Base64.decode64(encrypted_text)
-      salt = Base64.decode64(salt_base64)  if !salt_base64.empty?
+      salt = Base64.decode64(salt_base64)  # if !salt_base64.nil? # 空文字でもbase64処理を施す
   
       # 復号器を生成
-      dec = OpenSSL::Cipher::AES.new(bit, :CBC)
+      dec = OpenSSL::Cipher::AES.new(256, :CBC)
       dec.decrypt
   
       # パスワードとsaltをもとに鍵とivを生成し、設定
