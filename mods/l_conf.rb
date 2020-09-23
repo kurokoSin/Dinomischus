@@ -32,11 +32,7 @@ module Dinomischus
       key_path = yml[0][:key_path]
       raise RuntimeError.new("鍵ファイルが存在しません。#{key_path}") if !File.exist?(key_path)
       
-      if do_encrypt 
-        val_text = "?#{exec_encrypt( key_path, value)}"
-      else
-        val_text = value
-      end
+      val_text = do_encrypt ? "?#{exec_encrypt( key_path, value)}" : val_text
       
       yml[1][key] = {"value": val_text, "desc": desc}
       p yml
@@ -48,22 +44,31 @@ module Dinomischus
   
   
     def self.load_file(conf_path)
+      raise RuntimeError.new("設定ファイルが存在しません。#{conf_path}") if !File.exist?(conf_path)
+
       conf_file = YAML.load_file(conf_path)
-      @key_path = conf_file[0][:key_path]
+      key_path = conf_file[0][:key_path]
+      raw_items = conf_file[1]
       items = {}
-      conf_file.each do |hash|
-        continue if k.key == key_path
-        keyval = get(hash, hash.key, key_path)
-        keydesc = hash[key][:desc]
+      raw_items.each do |item|
+        keyval = get(key_path, item[:value] )
+        keydesc = item[:desc]
         items[key] = {"value": keyval, "desc": keydesc}
       end
       items
     end
   
   
-    def self.get(hash, key, key_path)
-      ret = hash[key]["value"]
-      ret = exec_decrypt(key_path, ret) if ret.match /^\?.*/
+    def self.get(key_path, value)
+      if value.match /^\?.*/
+        ret.gsub!("\n","")
+        ret = ret[/\?(.*)/, 1]
+        ret = exec_decrypt(key_path, ret) 
+      else
+        ret = value
+      end
+
+      ret
     end
 
     def self.get_test(value, key_path)

@@ -8,7 +8,6 @@ require File.expand_path('../crypt_aes.rb', __FILE__)
 
 module Dinomischus
   class KeyFile
-    attr_reader :type, :value
 
     # Create the key file
     def self.create(path, password = "")
@@ -23,8 +22,6 @@ module Dinomischus
 
     def self.load_file(path)
       yml = YAML.load_file(path)
-      @type  = yml[:key][:type]
-      @value = yml[:key][:value]
     end
   end
 end
