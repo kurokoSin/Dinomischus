@@ -1,0 +1,3 @@
+---
+- :conf_path: "/home/vagrant/Dinomischus/Assets/conf_file.yml"
+- :conf_path: "/home/vagrant/Dinomischus/Assets/conf_file_custom.yml"
