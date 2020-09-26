@@ -3,19 +3,14 @@
 - :dummy:
     :value: ''
     :desc: ''
-  add_key:
-    :value: "?G7Ct7ES2C2MN7mhf0lsLyvx9GrCi2uBBp7bjf00AvrM="
-    :desc: setumei
-  add_key2:
+  hogehoge:
+    :value: acai
+    :desc: fruit
+  fugafuga:
     :value: |-
-      ?vYO1c89W6usuZUxrKJpob1tqbzyH/Uiy6GtCaVcmUAXhrsY4/MNXTZhzOVhi
-      OyoY
-    :desc: setumei2
-  add_key1:
-    :value: |-
-      ?hgunFWEQ2xTTJ+OhTU9AM3yv/B420zrcGn4CVZxr4kKCu25MVTBmteb15ZLE
-      ExtZ
-    :desc: setumei1
+      ?nDYqNIK9QHZGZE2HgIhF5a5LsrY3ri744Xrw12ZJkFmFJSbg7WAiBWbs+ZnA
+      SbyC
+    :desc: crypted change test
   key1:
     :value: |-
       ?bj4Hmrh04FENDjm2wnpfI2cz2f7S6aR1skQSLSv1xZTX2HwT31TAdJg0qq5o
