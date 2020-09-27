@@ -43,7 +43,7 @@ module Dinomischus
     end
   
   
-    def self.load_file(conf_path)
+    def self.load_file(conf_path, specify = false )
       raise RuntimeError.new("設定ファイルが存在しません。#{conf_path}") if !File.exist?(conf_path)
 
       conf_file = YAML.load_file(conf_path)
@@ -55,13 +55,14 @@ module Dinomischus
         p key
         keyval = get(key_path, raw_items[key][:value] )
         keydesc = raw_items[key][:desc]
-        items[key] = {"value": keyval, "desc": keydesc}
+        items[key] = specify ? {"value": keyval, "desc": keydesc} : keyval
       end
       items
     end
   
   
-  private
+    # private class method -----------------
+
     def self.blank?(obj)
       obj.nil? || obj.empty?
     end
@@ -110,6 +111,11 @@ module Dinomischus
       end
     end
 
+    private_class_method :blank?
+    private_class_method :get
+    private_class_method :exec_encrypt
+    private_class_method :exec_decrypt
+    
   end
 end
 
