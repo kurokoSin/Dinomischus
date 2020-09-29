@@ -153,4 +153,4 @@ module Dinomischus
 
 end
 
-Dinomischus::Menu.menu
+
