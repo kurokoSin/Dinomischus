@@ -1,122 +1,44 @@
 # Dinomischus
-Helpful Secure Configuration File Utility
 
-# Not Implemented
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dinomischus`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-# 概要メモ（開発中）
-このプログラムは設定ファイルを扱うためのライブラリの位置づけです。
-これを使って設定したら、設定ファイルにまつわる多くの悩みが解消します。
-* 個別に設定値を暗号化することが可能！（パスワードを保存しても安心！）（平文ならテキストエディタで編集もできる！）
-* YAMLの設定ファイルをShellから扱うことが可能！（Rubyに限らず色々な場面で使えるね！）
-* 設定項目一つ一つにコメント(=help)を記述可能！（運用後でもわかりやすぅ〜い！）
-* 設定ファイルから別の設定ファイルへリンクが可能！
-  （設定ファイル一つ設定したら全設定呼び出せる！
-    本番用、開発用のが楽になる！共通設定、個別設定が分離できる！）
+TODO: Delete this and the text above, and describe your gem
 
+## Installation
 
-# 使い方メモ（開発中）
-## 呼び出し
-Ruby
-```
-# 設定読込
-sci = SecureConf.new(yaml_file)
-value = sc.read(key)
-# 設定追記
-sci = SecureConf.new(yaml_file)
-sc.add( key, value, crypt_flg, help)
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'dinomischus'
 ```
 
+And then execute:
 
-シェルから使用する場合
-```
-# 値読込
-value = `ruby sc.rb --read /path/to/SecureConfigFile.yml key`
-# 設定追加
-ruby sc.rb --add /path/to/SecureConfigFile.yml key value crypt_flg
-# テンプレート作成
-ruby sc.rb --init /path/to/SecureConfigFile.yml
-```
+    $ bundle install
 
-# 設定例
-```yaml
-# config_custom.yml 
----
-base:
-  public_key_path: ~/.ssh/id_ecdsa.pub
-  secret_key_path: ~/.ssh/id_ecdsa
-  ciphers: ecdsa
-  default_config_path: ./config_default.yml
- 
-key1: 
-  value: value1-1==
-  crypt: true
-  help: |
-    cryptがtrue の場合、value値は暗号化される。
-    (本設定値はサンプルのため復号化できない）
-    true = 暗号化、true以外 = 平文
+Or install it yourself as:
 
-key2: 
-  value: value2-1
-  crypt: false
-  help: |
-    設定値サンプル２。
-    value2にはstring型が入る
+    $ gem install dinomischus
 
-key3: 
-  value: value3-1==
-  crypt: true
-  help: カスタマイズ固有設定値(暗号化)
-```
+## Usage
 
-```yaml
-# conig_default.yml
----
-base:
-  public_key_path: ~/.ssh/id_ed25519.pub
-  secret_key_path: ~/.ssh/id_ed25519
-  ciphers: ed25519
+TODO: Write usage instructions here
 
- 
-key0_1: 
-  value: DetarAmEhoGehoGeSD67ncadfe2d==
-  crypt: true
-  help: |
-    cryptがtrue の場合、value値は暗号化される。
-    (本設定値はサンプルのため復号化できない）
-    true = 暗号化、true以外 = 平文
+## Development
 
-key0_2: 
-  value: value0_2
-  crypt: false
-  help: 平文デフォルト設定
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-key1: 
-  value: value1==
-  crypt: true
-  help: true = 暗号化、true以外 = 平文
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-key2: 
-  value: value2
-  crypt: false
-  help: |
-    設定値サンプル２。
-    value2にはstring型が入る
+## Contributing
 
-key4: 
-  value: value4
-  crypt: false
-  help: デフォルト設定値(平文)
-```
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dinomischus. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/dinomischus/blob/master/CODE_OF_CONDUCT.md).
 
-configファイルの ```base:default_config_path``` に設定が入っている場合、
-そちらを先に読み込んだ後に本ファイルの設定値を上書きで読み込む。
-上の例でいくと呼び出し側からはこのような設定に見える。
 
-|設定項目|値(取得する)|値(config_custom)|値(config_default)|
-|:-----:|:-------:|:--------------:|:----------------:|
-|key0_1 |復号した値|　(無し) | DetarAmEhoGehoGeSD67ncadfe2d== |
-|key0_2 | value0_2 | （無し） | value0_2 |
-|key1   | [value1-1==]を復号した値 | value1-1== | value1== |
-|key2   | value2-1 | value2-1 | value2 |
-|key3   | [value3-1==]を復号した値 | value3-1== | （無し） |
-|key4   | value4 | (無し） | value4　|
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Everyone interacting in the Dinomischus project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/dinomischus/blob/master/CODE_OF_CONDUCT.md).

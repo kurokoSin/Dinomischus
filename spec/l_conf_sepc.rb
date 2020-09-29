@@ -1,7 +1,7 @@
 require 'stringio'
 require 'tempfile'
 require 'fileutils'
-require_relative '../mods/l_conf.rb'
+require_relative '../lib/dinomischus/l_conf.rb'
 
 # 開発用、本番１用、本番２用　の使い分け設定が可能
 # -> キーの復元が出来ないことを利用して。

@@ -2,7 +2,7 @@
 
 require 'pp'
 require 'fileutils'
-require File.expand_path('../lib_sc.rb', __FILE__)
+require File.expand_path('../dinomischus.rb', __FILE__)
 
 module Dinomischus
   class Menu

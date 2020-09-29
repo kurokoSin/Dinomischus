@@ -1,12 +1,16 @@
 require 'yaml'
 
-require File.expand_path('../mods/crypt_aes.rb', __FILE__)
-require File.expand_path('../mods/merge_yaml.rb', __FILE__)
-require File.expand_path('../mods/l_key.rb', __FILE__)
-require File.expand_path('../mods/l_def.rb', __FILE__)
-require File.expand_path('../mods/l_conf.rb', __FILE__)
+require File.expand_path("../dinomischus/version", __FILE__)
+
+require File.expand_path("../dinomischus/crypt_aes.rb", __FILE__)
+require File.expand_path("../dinomischus/merge_yaml.rb", __FILE__)
+require File.expand_path("../dinomischus/l_key.rb", __FILE__)
+require File.expand_path("../dinomischus/l_def.rb", __FILE__)
+require File.expand_path("../dinomischus/l_conf.rb", __FILE__)
+
 
 module Dinomischus
+  class Error < StandardError; end
 
   # Create the key file
   def self.create_key_file(path, password = "")
