@@ -2,4 +2,4 @@
 
 require 'dinomischus'
 
-Dinomischus.menu
+Dinomischus::Menu.menu
