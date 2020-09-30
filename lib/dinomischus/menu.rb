@@ -2,7 +2,7 @@
 
 require 'pp'
 require 'fileutils'
-require File.expand_path('../dinomischus.rb', __FILE__)
+# require File.expand_path('../../dinomischus.rb', __FILE__)
 
 module Dinomischus
   class Menu
@@ -38,9 +38,9 @@ module Dinomischus
         puts "  "
         print "Input Your Config Prefix Name : "
         prj = gets.chomp
-        key_path  = File.expand_path("~/.config/#{prj}_key.yml")
-        conf_path = File.expand_path("./config/#{prj}_config.yml", __dir__)
-        def_path  = File.expand_path("./config/#{prj}_config_index.yml", __dir__)
+        key_path  = File.expand_path("~/.crypt_config/#{prj}_key.yml" )
+        conf_path = File.expand_path("./config/#{prj}_config.yml", Dir.pwd )
+        def_path  = File.expand_path("./config/#{prj}_config_index.yml", Dir.pwd )
         continue if prj == ""
       
         puts "Make File Default Value is ... "
@@ -116,7 +116,7 @@ module Dinomischus
     end
 
     def self.add_crypted_value(conf_path, key, value, desc)
-       Dinomischus.set_config(conf_path, key, value, true, desc)
+       Dinomischus.set_config(conf_path, key, value, desc, true)
     end
 
     def self.list_config_file(path, specify)
@@ -142,6 +142,8 @@ module Dinomischus
         p hash[:key][:value]  # => decrypted-value
         p hash[:key][:desc]   # => raw-description
       "
+      puts " "
+      puts " Press any key. "
       gets
     end
 
