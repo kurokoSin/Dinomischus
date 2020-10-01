@@ -23,7 +23,7 @@ RSpec.describe Dinomischus do
         allow(File).to receive(:open).with(cfg_path, 'r:bom|utf-8').and_yield(fcfg).once
         allow(File).to receive(:open).with(key_path, 'r:bom|utf-8').and_yield(fkey).once
         allow(File).to receive(:open).and_yield(fout)
-        result = Dinomischus::ConfFile.add(cfg_path, 'i_name', 'i_value', 'i_desc', false)
+        result = Dinomischus::ConfFile.set_item(cfg_path, 'i_name', 'i_value', 'i_desc', false)
         p fout.string
       end
 
@@ -35,7 +35,7 @@ RSpec.describe Dinomischus do
         allow(File).to receive(:open).with(cfg_path, 'r:bom|utf-8').and_yield(fcfg).once
         allow(File).to receive(:open).with(key_path, 'r:bom|utf-8').and_yield(fkey).once
         allow(File).to receive(:open).and_yield(fout)
-        result = Dinomischus::ConfFile.add(cfg_path, 'i_name', 'i_value', 'i_desc', true)
+        result = Dinomischus::ConfFile.set_item(cfg_path, 'i_name', 'i_value', 'i_desc', true)
         p fout.string
         yml = YAML.load(fout.string)
         pending expect( yml[1][:i_name] ).to eq 'i_value'
