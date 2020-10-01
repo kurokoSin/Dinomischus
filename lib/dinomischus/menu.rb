@@ -80,8 +80,9 @@ module Dinomischus
 
       add_crypted_value(conf_path, key, value, desc)
 
+      puts " "
       puts " Done! "
-      puts " Press any key. "
+      print " Press any key. "
       gets
     end
 
@@ -99,6 +100,8 @@ module Dinomischus
       }
       yml = list_config_file( conf_path, specify )
       pp yml
+      puts " "
+      print " Press Enter Key."
       gets
     end
 
