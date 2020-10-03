@@ -6,28 +6,39 @@ require 'fileutils'
 
 module Dinomischus
   class Menu
+ 
     def self.menu()
+      menu_clear_screen()
       loop {
-        puts "\e[H\e[2J"      # 画面のクリア
-        puts "****** Welcome Egoistic Config ******"
-        puts "  1. Make Template"
-        puts "  2. Add or Update Crypted Value"
-        puts "  3. List Configs Simple"
-        puts "  4. List Configs Specify"
-        puts "  8. Ruby Command List"
-        puts "  9. End "
-        print "-----------> Select Menu [1-4,8,9]: "
-        sel_num = gets.to_i
+        print "-----------> Select Menu [1-4,c,h,z]: "
+        sel_num = gets.chomp
 
         case sel_num
-        when 1 then menu_template()
-        when 2 then menu_add_config()
-        when 3 then list_config(false) # simple
-        when 4 then list_config(true)  # specify
-        when 8 then command_help()
-        when 9 then exit
+        when "1" then menu_template()
+        when "2" then menu_add_config()
+        when "3" then list_config(false) # simple
+        when "4" then list_config(true)  # specify
+        when "c" then menu_clear_screen() 
+        when "h" then command_help()
+        when "z" then exit
         end
       }
+    end
+
+    def self.menu_clear_screen()
+      puts "\e[H\e[2J"      # 画面のクリア
+      menu_select()
+    end
+
+    def self.menu_select()
+      puts "****** Welcome Egoistic Config ******"
+      puts "  1. Make Template"
+      puts "  2. Add or Update Crypted Value"
+      puts "  3. List Configs Simple"
+      puts "  4. List Configs Specify"
+      puts "  c. Clear Screen"
+      puts "  h. Ruby Command List"
+      puts "  z. End "
     end
 
     def self.menu_template()
@@ -43,21 +54,20 @@ module Dinomischus
         def_path  = File.expand_path("./config/#{prj}_config_index.yml", Dir.pwd )
         continue if prj == ""
       
-        puts "Make File Default Value is ... "
-        puts "  Key    File Place [#{key_path}]"
-        puts "  Config File Place [#{conf_path}]"
-        puts "  Define File Place [#{def_path}]"
+        puts  "Make File Default Value is ... "
+        puts  "  Key    File Place [#{key_path}]"
+        puts  "  Config File Place [#{conf_path}]"
+        puts  "  Define File Place [#{def_path}]"
+        puts  " "
         print "Press Any Key to Next Step... "
         ans = gets.chomp
         break 
       }
 
       make_template(key_path, conf_path, def_path)
-      puts " Done! "
-      puts " Next Step is Add Crypt Config|Plain Config to #{conf_path}.  "
-      puts " Add Config Value by Menu No.2 ."
-      puts " Press any key. "
-      gets
+      puts  "Done! "
+      puts  "Next Step is Add Crypt Config|Plain Config to ""#{conf_path}"" .  "
+      puts  "Add Config Value then You Select Menu No.2 ."
     end
 
     def self.menu_add_config()
@@ -80,10 +90,8 @@ module Dinomischus
 
       add_crypted_value(conf_path, key, value, desc)
 
-      puts " "
-      puts " Done! "
-      print " Press any key. "
-      gets
+      puts  " "
+      puts  "Done! "
     end
 
     def self.list_config(specify = false)
@@ -99,10 +107,9 @@ module Dinomischus
         end
       }
       yml = list_config_file( conf_path, specify )
-      pp yml
-      puts " "
-      print " Press Enter Key."
-      gets
+      puts  " "
+      pp    yml
+      puts  " "
     end
 
     # class private method -----------------------------
@@ -113,9 +120,9 @@ module Dinomischus
        check_and_make_dir(conf_path)
        
 
-       Dinomischus.create_key_file(key_path)
-       Dinomischus.create_def_file(def_path, conf_path)
-       Dinomischus.create_conf_file(conf_path, key_path)
+       Dinomischus.create_key_file(key_path)  rescue p "Exist Already. Skip Create. [#{key_path}]"
+       Dinomischus.create_def_file(def_path, conf_path) rescue p "Exist Already. Skip Create. [#{def_path}]" 
+       Dinomischus.create_conf_file(conf_path, key_path) rescue p "Exist Already. Skip Create. [#{conf_path}]"
     end
 
     def self.add_crypted_value(conf_path, key, value, desc)
@@ -132,22 +139,18 @@ module Dinomischus
     end
 
     def self.command_help()
-      puts "
-        require 'dinomischus'
-
-        # ex1
-        hash = Dinomischus.load('project_name_config_index.yml')  # also project_name_config.yml
-        p hash[:key]  # => decrypted-value
-        p hash[:key]  # => raw-description
-
-        # ex2
-        hash = Dinomischus.load('project_name_config_index.yml', true)  # also project_name_config.yml
-        p hash[:key][:value]  # => decrypted-value
-        p hash[:key][:desc]   # => raw-description
-      "
-      puts " "
-      puts " Press any key. "
-      gets
+      puts  "require 'dinomischus'"
+      puts  " "
+      puts  "# ex1 "
+      puts  "hash = Dinomischus.load_file('project_name_config_index.yml')  # also project_name_config.yml "
+      puts  "p hash[:key]  # => decrypted-value "
+      puts  "p hash[:key]  # => raw-description "
+      puts  " "
+      puts  "# ex2 "
+      puts  "hash = Dinomischus.load_file('project_name_config_index.yml', true)  # also project_name_config.yml "
+      puts  "p hash[:key][:value]  # => decrypted-value "
+      puts  "p hash[:key][:desc]   # => raw-description "
+      puts  " "
     end
 
     private_class_method :make_template

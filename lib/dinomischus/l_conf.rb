@@ -34,8 +34,7 @@ module Dinomischus
       
       val_text = do_encrypt ? "?#{exec_encrypt( key_path, value)}" : value
       
-      yml[1][key] = {"value": val_text, "desc": desc}
-      p yml
+      yml[1][key.to_sym] = {"value": val_text, "desc": desc}
       File.open(conf_path, 'w') do |f|
         YAML.dump( yml, f )
       end
@@ -52,7 +51,6 @@ module Dinomischus
       items = {}
       raw_items.keys.each do |key|
         continue if key == "dummy" && raw_items[key][:value] == ""
-        p key
         keyval = get(key_path, raw_items[key][:value] )
         keydesc = raw_items[key][:desc]
         items[key] = specify ? {"value": keyval, "desc": keydesc} : keyval

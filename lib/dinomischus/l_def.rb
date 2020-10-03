@@ -19,7 +19,7 @@ module Dinomischus
       raise RuntimeError.new("設定ファイルの指定がありません。#{conf_path}" ) if conf_path.empty?
       raise RuntimeError.new("設定ファイルが既に存在します。#{conf_path}"   ) if File.exist?(conf_path)
 
-       def_hash = {"conf_path": conf_path}
+       def_hash = [ {"conf_path": conf_path} ]
        File.open(def_path, 'w') do |f|
          YAML.dump(def_hash, f)
        end
