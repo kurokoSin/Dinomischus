@@ -72,7 +72,7 @@ module Dinomischus
 
     def self.menu_add_config()
       puts " "
-      puts "****** Make Template ******"
+      puts "****** Crypted Value Setting ******"
       conf_path = ""
       loop {
         print "  Input Your Config Path : "
