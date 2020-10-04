@@ -59,7 +59,7 @@ module Dinomischus
         puts  "  Config File Place [#{conf_path}]"
         puts  "  Define File Place [#{def_path}]"
         puts  " "
-        print "Press Any Key to Next Step... "
+        print "Press Enter Key to Next Step... "
         ans = gets.chomp
         break 
       }
