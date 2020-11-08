@@ -11,7 +11,7 @@ module Dinomischus
       menu_clear_screen()
       loop {
         print "-----------> Select Menu [1-4,c,h,z]: "
-        sel_num = gets.chomp
+        sel_num = STDIN.gets.chomp
 
         case sel_num
         when "1" then menu_template()
@@ -48,7 +48,7 @@ module Dinomischus
       loop{
         puts "  "
         print "Input Your Config Prefix Name : "
-        prj = gets.chomp
+        prj = STDIN.gets.chomp
         key_path  = File.expand_path("~/.crypt_config/#{prj}_key.yml" )
         conf_path = File.expand_path("./config/#{prj}_config.yml", Dir.pwd )
         def_path  = File.expand_path("./config/#{prj}_config_index.yml", Dir.pwd )
@@ -60,7 +60,7 @@ module Dinomischus
         puts  "  Define File Place [#{def_path}]"
         puts  " "
         print "Press Enter Key to Next Step... "
-        ans = gets.chomp
+        ans = STDIN.gets.chomp
         break 
       }
 
@@ -76,7 +76,7 @@ module Dinomischus
       conf_path = ""
       loop {
         print "  Input Your Config Path : "
-        conf_path = gets.chomp
+        conf_path = STDIN.gets.chomp
         if !File.exist?(conf_path)
           puts "Error. No Exists Config Path : [#{conf_path}]"
         else
@@ -84,9 +84,9 @@ module Dinomischus
         end
       }
       key = ""; value = ""; desc = "";
-      (print "  Input Your Key   : "; key   = gets.chomp ) while key.empty?
-      (print "  Input Your Value : "; value = gets.chomp ) while value.empty?
-      (print "  Input Your Description : "; desc = gets.chomp ) 
+      (print "  Input Your Key   : "; key   = STDIN.gets.chomp ) while key.empty?
+      (print "  Input Your Value : "; value = STDIN.gets.chomp ) while value.empty?
+      (print "  Input Your Description : "; desc = STDIN.gets.chomp ) 
 
       add_crypted_value(conf_path, key, value, desc)
 
@@ -99,7 +99,7 @@ module Dinomischus
       conf_path = ""
       loop {
         print "  Input Your Config Path : "
-        conf_path = gets.chomp
+        conf_path = STDIN.gets.chomp
         if !File.exist?(conf_path)
           puts "Error. No Exists Config Path : [#{conf_path}]"
         else

@@ -1,5 +1,72 @@
 #!/usr/bin/env ruby
 
 require 'dinomischus'
+require 'optparse'
+Version = Dinomischus::VERSION
 
-Dinomischus::Menu.menu
+class Command
+  def initialize
+    @options = {}
+    OptionParser.new do |opt|
+      opt.on('-g', '--get',  'Mode is value get')
+      opt.on('-l', '--list', 'Mode is list key-value')
+      opt.on('-m', '--menu', 'Mode is CUI Menu')
+      opt.on('-f FILE_PATH', '--file FILE_PATH', String, 'Reading File')
+      opt.on('-k KEY_NAME',  '--key KEY_NAME',   String, 'Get Value by key')
+    end.parse!(into: @options)
+  end
+
+  # 指定したオプションを指定しているか？
+  def has?(name)
+    @options.include?(name)
+  end
+
+  # 指定したオプションを全て指定いるか？
+  def has_all?(*names)
+    all_finded = true
+    names.each do |nm|
+      finded = @options.include?(@option.get(nm)) 
+      $stderr.puts("This Command needs '#{nm}' option. ") unless finded
+      all_finded &&= finded
+    end
+    all_finded
+  end
+
+  def get(name)
+    @options[name]
+  end
+
+  def self.CmdGet(path, key)
+    hash = Dinomischus.load_file(path)
+    hash[key.to_sym]
+  end
+
+  def self.CmdList( path )
+    Dinomischus.load_file( path )
+  end
+end
+
+# メニュー振り分け処理と引数チェック
+cmd = Command.new
+case true
+  # 値取得
+  when cmd.has?(:get) then
+    return unless cmd.has_all?(:file, :key)
+    value = Command.CmdGet(cmd.get(:file), cmd.get(:key) )
+    printf value
+
+  # 一覧表示
+  when cmd.has?(:list) then
+    return unless cmd.has_all?(:file)
+    value = Command.CmdList( cmd.get(:file) )
+    pp "#{value}"
+
+  # CUI メニュー表示
+  when cmd.has?(:menu) then
+    Dinomischus::Menu.menu
+
+  # for Compatiblility
+  else
+    Dinomischus::Menu.menu
+end
+
