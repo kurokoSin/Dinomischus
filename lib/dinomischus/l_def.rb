@@ -4,8 +4,7 @@ require 'optparse'
 require 'securerandom'
 require 'base64'
 
-require File.expand_path('../crypt_aes.rb', __FILE__)
-require File.expand_path('../l_conf.rb', __FILE__)
+require_relative './l_conf.rb'
 
 module Dinomischus
   attr_reader :items
@@ -31,7 +30,8 @@ module Dinomischus
       files = load_file(def_path)
       configs = {}
       files.each do |f|
-        cfg = Dinomischus::ConfFile.load_file(f[:conf_path])
+        conf_path = File.expand_path(f[:conf_path], def_path)
+        cfg = Dinomischus::ConfFile.load_file(conf_path)
         configs.merge!(cfg)
       end
       configs

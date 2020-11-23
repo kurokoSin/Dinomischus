@@ -4,7 +4,7 @@ require 'optparse'
 require 'securerandom'
 require 'base64'
 
-require File.expand_path('../crypt_aes.rb', __FILE__)
+require_relative './utils/crypt_dino.rb'
 
 module Dinomischus
 
@@ -32,7 +32,8 @@ module Dinomischus
       key_path = yml[0][:key_path]
       raise RuntimeError.new("鍵ファイルが存在しません。#{key_path}") if !File.exist?(key_path)
       
-      val_text = do_encrypt ? "?#{exec_encrypt( key_path, value)}" : value
+      #val_text = do_encrypt ? "?#{exec_encrypt( key_path, value)}" : value
+      val_text = do_encrypt ? "?#{Dinomischus::dino_encrypt( key_path, value)}" : value
       
       yml[1][key.to_sym] = {"value": val_text, "desc": desc}
       File.open(conf_path, 'w') do |f|
@@ -46,7 +47,8 @@ module Dinomischus
       raise RuntimeError.new("設定ファイルが存在しません。#{conf_path}") if !File.exist?(conf_path)
 
       conf_file = YAML.load_file(conf_path)
-      key_path = conf_file[0][:key_path]
+      key_path = sprintf("%s", conf_file[0][:key_path] )
+      key_path = File.expand_path(key_path, File.dirname(conf_path))
       raw_items = conf_file[1]
       items = {}
       raw_items.keys.each do |key|
@@ -70,7 +72,8 @@ module Dinomischus
       if value.match /^\?.*/
         ret.gsub!("\n","")
         ret = ret[/\?(.*)/, 1]
-        ret = exec_decrypt(key_path, ret) 
+        #ret = exec_decrypt(key_path, ret) 
+        ret = Dinomischus::dino_decrypt(key_path, ret) 
       else
         ret = value
       end

@@ -109,6 +109,20 @@ hash = Dinomischus.load_file('project_name_config_index.yml')
 ```
 The setting value of ```:fruit``` changed to ```banana``` depending on the file read later.
 
+### For Reading by the CLI
+
+get 1 value
+
+```
+bash$ dinomischus -g -f [FileName] -k [key]
+```
+
+get key-value list
+
+```
+bash$ dinomischus -l -f [FileName]
+```
+
 ### For Write Setting
 
 

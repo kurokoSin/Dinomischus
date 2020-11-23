@@ -1,0 +1,18 @@
+---
+- :key_path: "./secret.key"
+- :userId: 
+    :value: sampleUserId
+    :desc: This Value is Sample
+  :userName: 
+    :value: sampleName
+    :desc: This Value is Sample User Name
+  :password:
+    :value: |-
+      ?pEghAtKW3DozfXWGo0dsxEs4Wlo/vsD13TkMUQazvIVroq+V+yamcrEmAqMe
+      upsT
+    :desc: This Value is Encrypt Sample
+  :e-mail:
+    :value: |-
+      ?btKEnf3oPeYZgudLNlkOA/nu/x6pl3S4RpALeiwuDvl3Bll7/QsKRQJlLkTw
+      AhUJ/B91DPYQUB9RzHum04iPQ9/x2Lv8Al9G1Lrzs25GMKo=
+    :desc: This Value is Sample E-Mail

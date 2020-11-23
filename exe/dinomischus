@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'dinomischus'
+require_relative '../lib/dinomischus'
 require 'optparse'
 Version = Dinomischus::VERSION
 
@@ -21,11 +21,11 @@ class Command
     @options.include?(name)
   end
 
-  # 指定したオプションを全て指定いるか？
+  # 指定したオプションを全て指定しているか？
   def has_all?(*names)
     all_finded = true
     names.each do |nm|
-      finded = @options.include?(@option.get(nm)) 
+      finded = @options.include?(nm) 
       $stderr.puts("This Command needs '#{nm}' option. ") unless finded
       all_finded &&= finded
     end
@@ -44,6 +44,16 @@ class Command
   def self.CmdList( path )
     Dinomischus.load_file( path )
   end
+
+  def self.PrintHash( hash )
+    # pp "#{value}"
+    max_length = hash.keys.max_by(&:length).length
+    print "{\n"
+    hash.each do |k, v|
+      print sprintf("  %<key>-#{max_length}s : %<value>s \n", {key:k, value:v})
+    end
+    print "}\n"
+  end
 end
 
 # メニュー振り分け処理と引数チェック
@@ -59,7 +69,7 @@ case true
   when cmd.has?(:list) then
     return unless cmd.has_all?(:file)
     value = Command.CmdList( cmd.get(:file) )
-    pp "#{value}"
+    Command.PrintHash(value)
 
   # CUI メニュー表示
   when cmd.has?(:menu) then

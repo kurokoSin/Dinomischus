@@ -8,37 +8,64 @@ require_relative '../lib/dinomischus/l_conf.rb'
 # 設定の上書きをすることにより、共通設定ができるようにする。
 
 RSpec.describe Dinomischus do
-  let(:key_path){ File.join(__dir__, 'Assets/key.yml') }
-  let(:def_path){ File.join(__dir__, 'Assets/def_file.yml') }
-  let(:cfg_path){ File.join(__dir__, 'Assets/cfg_file.yml') }
-  let(:test_path){ File.join(__dir__,'Assets/sc_default.yml') }
+  let(:test_path){ File.join(RSPEC_ROOT,'resources/forWrite/config_base.yml') }
 
   describe '#ConfFile 設定値追加' do
-    context '設定項目を追加する場合' do
+    xcontext '設定項目を追加する場合' do
       it '平文で追加できること' do
-        fcfg = StringIO.new("---\n- :key_path: ""./Assets/key_file.yml""\n- :dummy:\n    :value: ''\n    :desc: ''", 'a+')
-        fkey = StringIO.new("---\n:key:\n  :type: sha256\n  :value: mb5XdEjiP3xTUSJdAkktAw", 'r')
-        fout = StringIO.new('','a')
-
-        allow(File).to receive(:open).with(cfg_path, 'r:bom|utf-8').and_yield(fcfg).once
-        allow(File).to receive(:open).with(key_path, 'r:bom|utf-8').and_yield(fkey).once
-        allow(File).to receive(:open).and_yield(fout)
         result = Dinomischus::ConfFile.set_item(cfg_path, 'i_name', 'i_value', 'i_desc', false)
-        p fout.string
       end
 
       it '暗号化されて追加できること' do
-        fcfg = StringIO.new("---\n- :key_path: ""./Assets/key_file.yml""\n- :dummy:\n    :value: ''\n    :desc: ''", 'a+')
-        fkey = StringIO.new("---\n:key:\n  :type: sha256\n  :value: mb5XdEjiP3xTUSJdAkktAw", "r")
         fout = StringIO.new('','w')
-
-        allow(File).to receive(:open).with(cfg_path, 'r:bom|utf-8').and_yield(fcfg).once
-        allow(File).to receive(:open).with(key_path, 'r:bom|utf-8').and_yield(fkey).once
         allow(File).to receive(:open).and_yield(fout)
+       
         result = Dinomischus::ConfFile.set_item(cfg_path, 'i_name', 'i_value', 'i_desc', true)
         p fout.string
         yml = YAML.load(fout.string)
-        pending expect( yml[1][:i_name] ).to eq 'i_value'
+        expect( yml[1][:i_name] ).to eq 'i_value'
+      end
+    end
+  end
+
+  describe '#ConfFile 設定値読込' do
+    context '設定ファイルの読込(相対パス指定)' do
+      let(:cfg_path){ File.join(RSPEC_ROOT, 'resources/config/config_base.yml') }
+
+      it '平文の読込' do
+        result = Dinomischus.load_file(cfg_path)
+        expect( result[:userId] ).to eq "sampleUserId"
+      end
+
+      it '暗号値の読込' do
+        result = Dinomischus.load_file(cfg_path)
+        expect( result[:password] ).to eq 'samplePassword'
+      end
+    end
+
+    context '定義ファイルの読込' do
+      let(:def_path){ File.join(RSPEC_ROOT, 'resources/config/index.yml') }
+
+      context '平文の読込' do
+        it 'overwriteの指定が無い設定はbaseの設定であること' do
+          result = Dinomischus.load_file(def_path)
+          expect( result[:userId] ).to eq "sampleUserId"   
+        end
+        it 'overwrite の設定値であること' do
+          result = Dinomischus.load_file(def_path)
+          expect( result[:userName] ).to eq "overwriteName"   
+        end
+      end
+
+      context '暗号文の読込' do
+        it 'base のままであること' do
+          result = Dinomischus.load_file(def_path)
+          expect( result[:password] ).to eq "samplePassword"   
+        end
+        it 'overwrite の設定値であること' do
+          result = Dinomischus.load_file(def_path)
+          expect( result[:"e-mail"] ).to eq "jhon.do@example.com"   
+        end
       end
     end
   end

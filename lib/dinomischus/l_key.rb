@@ -4,8 +4,6 @@ require 'optparse'
 require 'securerandom'
 require 'base64'
 
-require File.expand_path('../crypt_aes.rb', __FILE__)
-
 module Dinomischus
   class KeyFile
 
